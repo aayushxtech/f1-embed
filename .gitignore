@@ -1,0 +1,126 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# csv
+*.csv
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Data files (keep structure but ignore large data)
+data/*.csv
+data/*.json
+data/*.pickle
+data/*.pkl
+data/*.parquet
+*.h5
+*.hdf5
+
+# Model files (these can be large)
+models/*.pkl
+models/*.h5
+models/*.joblib
+*.model
+
+# Cache directories
+.cache/
+fastf1_cache/
+*_cache/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# API keys and secrets
+secrets.json
+credentials.json
+*.key
+*.pem
+
+# Large output files
+*.zip
+*.tar.gz
+*.rar
+
+# FastF1 specific cache (this can get very large)
+**/fastf1_cache/**
+
+# Keep important files for deployment
+!requirements.txt
+!app.py
+!main.py
+!Dockerfile
+!render.yaml
+!.render.yaml
+!Procfile
+!runtime.txt
+!setup.py
+!README.md
+!LICENSE
+
+# Keep essential data structure
+!data/README.md
+!models/README.md
+
+# Ignore large notebook outputs but keep notebooks for reference
+# (Consider cleaning outputs before committing)
