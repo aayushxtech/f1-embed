@@ -29,9 +29,9 @@ The preprocessing pipeline has been fully implemented with the following capabil
   - RPM (engine revolutions per minute)
   - Speed (km/h)
   - Throttle (0-100%)
-  - Brake (0-100%)
+  - Brake (True/False)
   - Gear (1-8)
-  - DRS (Drag Reduction System: 0/1)
+  - DRS (Drag Reduction System: 0-9)
 
 #### **Contextual Metadata Encoding**
 
