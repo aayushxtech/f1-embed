@@ -91,6 +91,10 @@ temp/
 *.tmp
 *.temp
 
+# npy and npz files
+*.npy
+*.npz
+
 # API keys and secrets
 secrets.json
 credentials.json
