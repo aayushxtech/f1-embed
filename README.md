@@ -19,30 +19,6 @@ The F1-Embed Transformer model has been successfully implemented, trained, and e
 
 Develop a machine learning pipeline that transforms raw Formula 1 telemetry data into meaningful vector embeddings for downstream analytical tasks.
 
-#### For **Racing Teams:**
-
-- Competitive advantage through data-driven setup optimization
-- Driver development and performance coaching
-- Strategic decision-making support during race weekends
-
-#### For **Broadcasting & Media:**
-
-- Enhanced fan experience through interactive analysis tools
-- Real-time insights for commentary and analysis
-- Historical context and comparison capabilities
-
-#### For **Regulatory Bodies:**
-
-- Automated monitoring of driving standards and safety
-- Data-driven rule development and enforcement
-- Performance balancing insights across teams
-
-#### For **Researchers & Academia:**
-
-- Novel applications of transformer architectures to time-series data
-- Cross-domain transfer learning opportunities
-- Sports analytics methodology development
-
 ## 📊 Data Processing Pipeline
 
 ### Data Sources & Collection
