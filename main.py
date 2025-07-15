@@ -65,53 +65,6 @@ async def model_endpoint(request: Request, data: EmbeddingRequest):
         )
 
 
-@app.post("/embed_batch")
-@limiter.limit("5/minute")
-async def model_endpoint_batch(request: Request, data: dict):
-    try:
-        # Handle batch embeddings
-        X_seq = np.array(data["X_seq"])  # Shape: (batch_size, 100, 6)
-        X_context = np.array(data["X_context"])  # Shape: (batch_size, 22)
-
-        # Validate batch shapes
-        if len(X_seq.shape) != 3 or X_seq.shape[1:] != (100, 6):
-            return JSONResponse(
-                status_code=400,
-                content={
-                    "error": f"X_seq must have shape (batch_size, 100, 6), got {X_seq.shape}"}
-            )
-
-        if len(X_context.shape) != 2 or X_context.shape[1] != 22:
-            return JSONResponse(
-                status_code=400,
-                content={
-                    "error": f"X_context must have shape (batch_size, 22), got {X_context.shape}"}
-            )
-
-        if X_seq.shape[0] != X_context.shape[0]:
-            return JSONResponse(
-                status_code=400,
-                content={"error": "Batch sizes for X_seq and X_context must match"}
-            )
-
-        # Get batch embeddings
-        embeddings = get_embedding(model, X_seq, X_context)
-
-        return JSONResponse(content={
-            "embedded_lap_times": embeddings if isinstance(embeddings, list) else embeddings.tolist(),
-            "batch_size": X_seq.shape[0],
-            "status": "success"
-        })
-
-    except Exception as e:
-        print(f"Error processing batch request: {e}")
-        return JSONResponse(
-            status_code=500,
-            content={"error": "Error processing batch request",
-                     "details": str(e)}
-        )
-
-
 @app.get("/health")
 async def health_check():
     return JSONResponse(content={"status": "healthy", "model_loaded": model is not None})
