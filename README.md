@@ -19,22 +19,6 @@ The F1-Embed Transformer model has been successfully implemented, trained, and e
 
 Develop a machine learning pipeline that transforms raw Formula 1 telemetry data into meaningful vector embeddings for downstream analytical tasks.
 
-### Technical Applications
-
-#### 🔧 **Model Interpretability & Explainability**
-
-- **Feature Importance Analysis**: Understanding which telemetry aspects drive predictions
-- **Embedding Visualization**: t-SNE/UMAP projections of lap similarity spaces
-- **Attention Pattern Analysis**: Understanding what the Transformer focuses on during predictions
-
-#### 📈 **Performance Monitoring & Optimization**
-
-- **Model Drift Detection**: Monitoring embedding quality over time
-- **Incremental Learning**: Adapting to new seasons and regulation changes
-- **Multi-Resolution Analysis**: Different time scales (sector, lap, stint, session)
-
-### Domain-Specific Value Propositions
-
 #### For **Racing Teams:**
 
 - Competitive advantage through data-driven setup optimization
