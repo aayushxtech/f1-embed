@@ -260,7 +260,7 @@ R² Score: 0.8235
 1. **Repository Setup**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/aayushxtech/f1-embed.git
    cd f1-embed
    ```
 
