@@ -17,8 +17,10 @@ model = load_model()
 
 
 class EmbeddingRequest(BaseModel):
-    X_seq: List[List[float]]  # Shape should be (100, 6) for a single lap
-    X_context: List[float]    # Shape should be (22,) for context features
+    X_seq: List[List[float]]
+    X_context: List[float]
+
+# Predicts lap time for a single F1 lap using telemetry and contextual data
 
 
 @app.post("/embed")
@@ -29,7 +31,6 @@ async def model_endpoint(request: Request, data: EmbeddingRequest):
         X_seq = np.array(data.X_seq)
         X_context = np.array(data.X_context)
 
-        # Check X_seq shape: should be (100, 6)
         if X_seq.shape != (100, 6):
             return JSONResponse(
                 status_code=400,
@@ -37,7 +38,6 @@ async def model_endpoint(request: Request, data: EmbeddingRequest):
                     "error": f"X_seq must have shape (100, 6), got {X_seq.shape}"}
             )
 
-        # Check X_context shape: should be (22,)
         if X_context.shape != (22,):
             return JSONResponse(
                 status_code=400,
@@ -45,7 +45,6 @@ async def model_endpoint(request: Request, data: EmbeddingRequest):
                     "error": f"X_context must have shape (22,), got {X_context.shape}"}
             )
 
-        # Add batch dimension for model inference
         X_seq_batch = X_seq[np.newaxis, :]  # Shape: (1, 100, 6)
         X_context_batch = X_context[np.newaxis, :]  # Shape: (1, 22)
 
@@ -64,10 +63,14 @@ async def model_endpoint(request: Request, data: EmbeddingRequest):
             content={"error": "Error processing request", "details": str(e)}
         )
 
+# Returns API health status and confirms model is loaded successfully
+
 
 @app.get("/health")
 async def health_check():
     return JSONResponse(content={"status": "healthy", "model_loaded": model is not None})
+
+# Provides model specifications including input shapes, features, and output format
 
 
 @app.get("/model_info")
