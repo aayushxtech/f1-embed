@@ -1,111 +1,160 @@
-# F1-Embed
+# F1-Embed: Deep Learning for Formula 1 Telemetry Analysis
 
-**F1-Embed** is a Transformer-based deep learning model that learns compact, high-dimensional vector representations (embeddings) of complete Formula 1 laps using raw telemetry data.
+**F1-Embed** is a Transformer-based deep learning system that generates compact, high-dimensional vector representations (embeddings) of complete Formula 1 racing laps using raw telemetry data streams.
 
-Each embedding encodes the driving style, car behavior, and performance characteristics from a lap — enabling driver identification, team classification, similarity search, and lap style analysis.
+The system encodes driving patterns, vehicle dynamics, and performance characteristics from temporal telemetry sequences, enabling applications such as driver identification, team classification, lap similarity analysis, and performance prediction.
 
-> Think of it as "Word2Vec for racing laps" — but built from telemetry sequences like speed, throttle, brake, gear, and more.
+> **Conceptual Framework**: Similar to Word2Vec for natural language processing, F1-Embed learns contextual representations from sequential telemetry data including speed, throttle, brake pressure, gear selection, and aerodynamic systems.
 
-## 🚧 Current Status
+## 📋 Project Overview
 
-The project is currently in the **data preprocessing phase**. All F1 telemetry data has been successfully processed and prepared for model training. The preprocessing pipeline is complete and ready for the next phase: model architecture implementation and training.
+### Objective
 
-## 📊 Preprocessing Pipeline
+Develop a machine learning pipeline that transforms raw Formula 1 telemetry data into meaningful vector embeddings for downstream analytical tasks.
 
-### ✅ Completed Features
+### Key Applications
 
-The preprocessing pipeline has been fully implemented with the following capabilities:
+- **Driver Style Classification**: Identify unique driving patterns and techniques
+- **Performance Prediction**: Predict lap times based on telemetry patterns
+- **Similarity Search**: Find comparable laps across different sessions/drivers
+- **Team Strategy Analysis**: Analyze constructor-specific approaches and setups
 
-#### **Data Collection & Cleaning**
+## 🚧 Current Development Status
 
-- Raw F1 telemetry data extraction using FastF1 API
-- Data validation and quality checks
-- Missing value handling and outlier detection
+**Phase**: Data Preprocessing Complete ✅  
+**Next Phase**: Model Architecture Implementation 🚧
 
-#### **Sequence Processing**
+All Formula 1 telemetry data has been successfully extracted, cleaned, and structured for machine learning model training. The preprocessing pipeline is production-ready and the dataset is prepared for neural network training.
 
-- **Fixed-length sequences**: Each lap resampled to exactly 100 time steps using `numpy.interp`
-- **Key telemetry features**: 6 core features per time step
-  - RPM (engine revolutions per minute)
-  - Speed (km/h)
-  - Throttle (0-100%)
-  - Brake (True/False)
-  - Gear (1-8)
-  - DRS (Drag Reduction System: 0-9)
+## 📊 Data Processing Pipeline
 
-#### **Contextual Metadata Encoding**
+### Data Sources & Collection
 
-- One-hot encoding for categorical features:
-  - Driver identification
-  - Tire compound (Soft, Medium, Hard, etc.)
-  - Team/Constructor
-  - Track/Circuit information
-  - Session type (Practice, Qualifying, Race)
-- Contextual features attached per lap for enhanced model learning
+- **Primary API**: FastF1 telemetry data extraction
+- **Coverage**: Multiple F1 seasons(2022, 2023, 2024) with comprehensive session data from Silverstone, Monaco, Spa, Suzuka
+- **Data Types**: Practice, Qualifying, and Race session telemetry
+- **Quality Assurance**: Automated validation and outlier detection
 
-#### **Target Variable Processing**
+#### Temporal Sequence Processing
 
-- Lap times extracted and normalized
-- Converted to float seconds for regression tasks
-- Ready for both classification and regression modeling
-
-### 📈 Final Data Structure
-
-The preprocessed data is structured as follows:
+Each racing lap is converted into a standardized temporal sequence:
 
 ```python
-# Input sequences (telemetry time series)
-X_seq: shape (N, 100, 6)
-# Where:
-# - N = number of laps
-# - 100 = fixed sequence length (time steps)
-# - 6 = telemetry features [RPM, Speed, Throttle, Brake, Gear, DRS]
-
-# Contextual metadata (one-hot encoded)
-X_context: shape (N, ctx_dims)
-# Where:
-# - N = number of laps  
-# - ctx_dims = total dimensions after one-hot encoding
-
-# Target variable (lap times)
-y: shape (N,)
-# Lap times in seconds (float)
+# Sequence standardization using numpy interpolation
+Sequence Length: 100 time steps (fixed)
+Resampling Method: numpy.interp() for uniform temporal distribution
 ```
 
-### 🎯 Ready for Model Training
+#### Core Telemetry Features (6 dimensions per time step)
 
-The data is now fully prepared for:
+1. **RPM**: Engine revolutions per minute [0-15,000+]
+2. **Speed**: Vehicle velocity in km/h [0-350+]
+3. **Throttle**: Accelerator pedal position [0-100%]
+4. **Brake**: Brake pedal pressure [True/False]
+5. **Gear**: Transmission gear selection [1-8]
+6. **DRS**: Drag Reduction System activation [0-9]
 
-- **LSTM/GRU networks** for sequence modeling
-- **Transformer encoders** for attention-based learning
-- **Hybrid architectures** combining sequence and contextual data
-- **Multi-task learning** (lap time prediction + driver/team classification)
+#### Contextual Metadata Encoding
 
-## 🔄 Next Steps
+Categorical variables processed through one-hot encoding:
 
-1. **Model Architecture Design**
-   - Implement Transformer encoder for sequence processing
-   - Design fusion layer for combining sequence and contextual features
-   - Define multi-task learning objectives
+- **Driver Identity**: Individual driver classification
+- **Tire Compound**: Soft/Medium/Hard compound selection
+- **Constructor/Team**: Vehicle manufacturer and team affiliation
+- **Circuit**: Track-specific characteristics and layout
+- **Session Type**: Practice/Qualifying/Race session context
 
-2. **Training Pipeline**
-   - Set up training/validation splits
-   - Implement training loops with proper metrics
-   - Add model checkpointing and early stopping
+#### Target Variable Preparation
 
-3. **Evaluation & Analysis**
-   - Lap time prediction accuracy
-   - Embedding quality assessment
-   - Driver/team classification performance
-   - Similarity search capabilities
+- **Lap Time**: Continuous target variable in seconds (float precision)
+- **Normalization**: Statistical scaling for model optimization
+- **Task Compatibility**: Configured for both regression and classification objectives
 
-## 🛠️ Technical Stack
+### Final Data Structure
+
+The preprocessing pipeline outputs three structured arrays:
+
+```python
+# Telemetry Time Series
+X_seq: numpy.ndarray, shape (N, 100, 6)
+├── N: Total number of processed laps
+├── 100: Fixed temporal sequence length
+└── 6: Telemetry feature dimensions
+
+# Contextual Metadata
+X_context: numpy.ndarray, shape (N, ctx_dims)
+├── N: Total number of processed laps
+└── ctx_dims: One-hot encoded categorical feature dimensions
+
+# Performance Targets
+y: numpy.ndarray, shape (N,)
+└── Lap times in seconds (continuous float values)
+```
+
+## 🎯 Machine Learning Readiness
+
+The preprocessed dataset supports multiple neural network architectures:
+
+### Sequence Models
+
+- **LSTM/GRU Networks**: For temporal pattern recognition
+- **Transformer Encoders**: For attention-based sequence modeling
+- **Hybrid Architectures**: Combining sequence and contextual information
+
+### Learning Objectives
+
+- **Primary Task**: Lap time regression
+- **Secondary Tasks**: Driver classification, team identification
+- **Multi-task Learning**: Joint optimization across multiple objectives
+
+## 🛠️ Technical Infrastructure
+
+### Core Dependencies
 
 - **Data Processing**: FastF1, pandas, numpy
-- **Deep Learning**: PyTorch (planned)
-- **Preprocessing**: scikit-learn for encoding
-- **Visualization**: matplotlib, seaborn (planned)
+- **Deep Learning**: PyTorch 2.7.1
+- **Feature Engineering**: scikit-learn
+- **Development Environment**: Jupyter Lab, IPython
+- **Visualization**: matplotlib
+- **Web Framework**: Flask/FastAPI (deployment-ready)
+
+### System Requirements
+
+- **Python**: 3.8+ (recommended 3.10+)
+- **Memory**: 8GB+ RAM (16GB+ recommended for large datasets)
+- **Storage**: 10GB+ available space
+
+## 🚀 Quick Start Guide
+
+### Installation & Setup
+
+1. **Repository Setup**
+
+   ```bash
+   git clone https://github.com/aayushxtech/f1-embed.git
+   cd f1-embed
+   ```
+
+2. **Environment Configuration**
+
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   ```
+
+## 🤝 Contributing
+
+This project follows standard open-source contribution practices:
+
+- Fork the repository for feature development
+- Create feature branches with descriptive names
+- Submit pull requests with comprehensive documentation
+- Follow established code style and testing protocols
 
 ---
-
-*Project Status:* Preprocessing Complete ✅ | *Next Phase*: Model Implementation 🚧
+  
+**Last Updated**: July 2025 | **Version**: 1.0.0-alpha
