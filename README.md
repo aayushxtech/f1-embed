@@ -19,12 +19,45 @@ The F1-Embed Transformer model has been successfully implemented, trained, and e
 
 Develop a machine learning pipeline that transforms raw Formula 1 telemetry data into meaningful vector embeddings for downstream analytical tasks.
 
-### Key Applications
+### Technical Applications
 
-- **Driver Style Classification**: Identify unique driving patterns and techniques
-- **Performance Prediction**: Predict lap times based on telemetry patterns
-- **Similarity Search**: Find comparable laps across different sessions/drivers
-- **Team Strategy Analysis**: Analyze constructor-specific approaches and setups
+#### 🔧 **Model Interpretability & Explainability**
+
+- **Feature Importance Analysis**: Understanding which telemetry aspects drive predictions
+- **Embedding Visualization**: t-SNE/UMAP projections of lap similarity spaces
+- **Attention Pattern Analysis**: Understanding what the Transformer focuses on during predictions
+
+#### 📈 **Performance Monitoring & Optimization**
+
+- **Model Drift Detection**: Monitoring embedding quality over time
+- **Incremental Learning**: Adapting to new seasons and regulation changes
+- **Multi-Resolution Analysis**: Different time scales (sector, lap, stint, session)
+
+### Domain-Specific Value Propositions
+
+#### For **Racing Teams:**
+
+- Competitive advantage through data-driven setup optimization
+- Driver development and performance coaching
+- Strategic decision-making support during race weekends
+
+#### For **Broadcasting & Media:**
+
+- Enhanced fan experience through interactive analysis tools
+- Real-time insights for commentary and analysis
+- Historical context and comparison capabilities
+
+#### For **Regulatory Bodies:**
+
+- Automated monitoring of driving standards and safety
+- Data-driven rule development and enforcement
+- Performance balancing insights across teams
+
+#### For **Researchers & Academia:**
+
+- Novel applications of transformer architectures to time-series data
+- Cross-domain transfer learning opportunities
+- Sports analytics methodology development
 
 ## 📊 Data Processing Pipeline
 
@@ -105,6 +138,87 @@ y: numpy.ndarray, shape (N,)
 ### F1Embedder: Transformer-Based Architecture
 
 The core model implements a hybrid architecture combining sequence modeling with contextual information:
+
+```model-architecture
+┌─────────────────────────────────────────────────────────────────┐
+│                    F1-Embed Architecture                        │
+└─────────────────────────────────────────────────────────────────┘
+
+Input Data:
+┌──────────────────────┐    ┌──────────────────────────────────────┐
+│    X_context         │    │            X_seq                     │
+│   (N, 22)            │    │         (N, 100, 6)                  │
+│                      │    │                                      │
+│ • Driver             │    │ • RPM      • Throttle                │
+│ • Team               │    │ • Speed    • Brake                   │
+│ • Compound           │    │ • nGear    • DRS                     │
+│ • Circuit            │    │                                      │
+│ • Session Type       │    │ Time Steps: 100                      │
+└──────────────────────┘    └──────────────────────────────────────┘
+         │                                   │
+         │                                   │
+         ▼                                   ▼
+┌──────────────────────┐    ┌──────────────────────────────────────┐
+│   Context MLP        │    │      Embedding Layer                 │
+│                      │    │     Linear(6 → 64)                   │
+│ Linear(22 → 64)      │    │                                      │
+│ ReLU                 │    │                                      │
+│ Linear(64 → 64)      │    │                                      │
+└──────────────────────┘    └──────────────────────────────────────┘
+         │                                   │
+         │                                   ▼
+         │                  ┌──────────────────────────────────────┐
+         │                  │    Positional Encoding               │
+         │                  │       (sinusoidal)                   │
+         │                  └──────────────────────────────────────┘
+         │                                   │
+         │                                   ▼
+         │                  ┌──────────────────────────────────────┐
+         │                  │    Transformer Encoder               │
+         │                  │                                      │
+         │                  │ ┌────────────────────────────────┐   │
+         │                  │ │  Multi-Head Attention (4 heads)│   │
+         │                  │ │       + Layer Norm             │   │
+         │                  │ └────────────────────────────────┘   │
+         │                  │ ┌────────────────────────────────┐   │
+         │                  │ │   Feed Forward (64→2048→64)    │   │
+         │                  │ │       + Layer Norm             │   │
+         │                  │ └────────────────────────────────┘   │
+         │                  │                                      │
+         │                  │        ×2 Layers                     │
+         │                  └──────────────────────────────────────┘
+         │                                   │
+         │                                   ▼
+         │                  ┌──────────────────────────────────────┐
+         │                  │      Global Average Pooling          │
+         │                  │        (100, 64) → (64)              │
+         │                  └──────────────────────────────────────┘
+         │                                   │
+         │                                   │
+         └──────────────┬────────────────────┘
+                        │
+                        ▼
+           ┌──────────────────────────────────────┐
+           │          Fusion Layer                │
+           │     Concatenate: [64 + 64] = 128     │
+           └──────────────────────────────────────┘
+                        │
+                        ▼
+           ┌──────────────────────────────────────┐
+           │         Regressor Head               │
+           │                                      │
+           │      Linear(128 → 64)                │
+           │      ReLU                            │
+           │      Linear(64 → 1)                  │
+           └──────────────────────────────────────┘
+                        │
+                        ▼
+           ┌──────────────────────────────────────┐
+           │         Output                       │
+           │    Predicted Lap Time                │
+           │      (seconds)                       │
+           └──────────────────────────────────────┘
+```
 
 #### Components
 
