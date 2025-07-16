@@ -7,6 +7,8 @@ from model import load_model, get_embedding
 from pydantic import BaseModel
 from typing import List
 import numpy as np
+import os
+import uvicorn
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI()
@@ -100,3 +102,8 @@ def rate_limit_exceeded_handler(request, exc):
         status_code=429,
         content={"detail": "Rate limit exceeded. Please try again later."}
     )
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
