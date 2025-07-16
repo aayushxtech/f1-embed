@@ -417,15 +417,14 @@ def extract_embeddings(model, X_seq, X_context):
 
 - **Driver Coverage**: VER, LEC, SAI (representative of top-tier performance)
 - **Temporal Coverage**: 3 seasons (2022-2024) capturing recent regulation changes
-- **Circuit Diversity**: 4 distinct tracks with varying characteristics
+- **Circuit Diversity**: 4 distinct tracks with varying characteristics(Japan, Monaco, Spain, Britain)
 - **Session Variety**: All session types from practice to race conditions
 
 ### Areas for Improvement
 
 - **Multi-task Learning**: Extend to driver/team classification
 - **Embedding Quality**: Implement similarity search validation
-- **Dataset Expansion**: Include more drivers and circuits
-- **Real-time Streaming**: Add live telemetry processing capabilities
+- **Dataset Expansion**: Include more years and circuits
 
 ## 🤝 Contributing
 
