@@ -25,7 +25,7 @@ class EmbeddingRequest(BaseModel):
 # Predicts lap time for a single F1 lap using telemetry and contextual data
 
 
-@app.get("/", response_class=PlainTextResponse)
+@app.get("/")
 async def root():
     return JSONResponse(content={
         "message": "Welcome to the F1 Lap Time Embedder API",
