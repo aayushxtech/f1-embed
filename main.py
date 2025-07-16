@@ -27,7 +27,11 @@ class EmbeddingRequest(BaseModel):
 
 @app.get("/", response_class=PlainTextResponse)
 async def root():
-    return PlainTextResponse("Welcome to the F1 Lap Time Embedding API! Use /embed to get lap time embeddings.")
+    return JSONResponse(content={
+        "message": "Welcome to the F1 Lap Time Embedder API",
+        "documentation": "Visit /docs for API documentation",
+        "status": "live"
+    })
 
 
 @app.post("/embed")
